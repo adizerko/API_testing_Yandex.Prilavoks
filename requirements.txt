@@ -1,0 +1,4 @@
+pytest
+requests
+pydantic
+allure-pytest
