@@ -1,0 +1,1 @@
+[Shop(name='Чух-чух и уже у вас', workingHours=WorkingHours(start=6, end=20))]

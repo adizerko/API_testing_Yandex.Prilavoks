@@ -1,8 +1,9 @@
-BASE_URL = "https://49ffcc8a-3fbb-4c0c-9929-cf54b93ed9e1.serverhub.praktikum-services.ru"
+BASE_URL = "https://9fce21fd-87d1-4755-99d0-3c9654691e92.serverhub.praktikum-services.ru"
 
 ENDPOINTS = {
     "get_warehouse": "/api/v1/warehouses",
-    "add_user": "/api/v1/users"
+    "add_user": "/api/v1/users",
+    "get_delivery": "/api/v1/couriers"
 }
 
 WAREHOUSES_DATA = [
@@ -10,6 +11,13 @@ WAREHOUSES_DATA = [
     ("Шведский дом", 8, 23),
     ("Чердак", 8, 21),
     ("Большой мир", 5, 20)
+]
+
+DELIVERY_DATA = [
+    ("На метле уюта", 8, 22),
+    ("Доставка Москва", 8, 22),
+    ("Привезём быстро", 7, 21),
+    ("Чух-чух и уже у вас", 6, 20)
 ]
 
 USER_DATA = {
