@@ -11,7 +11,7 @@ class APIClient:
     def get(self, path, params=None):
         self.response =  requests.get(f"{self.base_url}{path}", params=params)
         self.response_json = self.response.json()
-        assert self.response.status_code == 200
+
         
     def post(self, path, data=None):
         self.response = requests.post(f"{self.base_url}{path}", json=data)

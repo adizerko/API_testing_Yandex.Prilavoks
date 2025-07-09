@@ -1,18 +1,17 @@
 import pytest
 import config.settings
 from utils.api_client import APIClient
-from schemas.user_schema import Shop
-import allure
+
 
 client = APIClient()
 
 message_uncorrect = {
                     "empty": "Не все необходимые параметры были переданы",
                     "firstName": "Имя пользователя введено некорректно. Имя может содержать только русские или латинские буквы, длина должна быть не менее 2 и не более 15 символов",
-                    "phone": "Телефонный номер пользователя введен некорреткно. Номер может содержать только цифры и знак +",
-                    "address":"Адресс введен некорректно. Адрес может содержать только русские буквы, цифры и знаки препинания, длина адреса не должна быть менее 5 и более 50 символов",
-                    "comment":"Комментарий пользователя. Комментарий может содержать только русские символы и знаки препинания, длина комментария не должгна быть более 24 символов",
-                    "email":"Адрес электронной почты пользователя введен некорректно. Адрес может содержать только латинские символы,символы .-@, длина должна быть не менее 5 и не более 50 символов" 
+                    "phone": "Телефонный номер пользователя введен некорректно. Номер может содержать только цифры и знак +",
+                    "address":"Адрес введен некорректно. Адрес может содержать только русские буквы, цифры и знаки препинания, длина адреса не должна быть менее 5 и более 50 символов",
+                    "comment":"Комментарий пользователя. Комментарий может содержать только русские символы и знаки препинания, длина комментария не должна быть более 24 символов",
+                    "email":"Адрес электронной почты пользователя введен некорректно. Адрес может содержать только латинские символы, символы .-@, длина должна быть не менее 5 и не более 50 символов" 
                         }
 
     
@@ -21,7 +20,10 @@ def send_and_assert(field, value, expected_code=201, expected_msg=None):
     data[field] = value
     client.post(config.settings.ENDPOINTS["add_user"], data)
     
-    assert client.response.status_code == expected_code
+    assert client.response.status_code == expected_code, (
+        f"Expected status code {expected_code}, got {client.response.status_code}\n"
+        f"Response: {client.response.text}"
+    )
 
     if expected_code == 201:
         assert "authToken" in client.response_json
@@ -41,7 +43,7 @@ def test_correct_add_user_max_():
     
 @pytest.mark.parametrize("name", config.settings.PAYLOAD["NAME_POSITIVE"], ids=str)
 def test_positive_name_add_user(name):
-    send_and_assert("name", name, 201)
+    send_and_assert("firstName", name, 201)
     
 @pytest.mark.parametrize("name", config.settings.PAYLOAD["NAME_NEGATIVE"], ids=str)
 def test_negative_name_add_user(name):
@@ -65,7 +67,7 @@ def test_negative_address_add_user(address):
 
 @pytest.mark.parametrize("comment", config.settings.PAYLOAD["COMMENT_POSITIVE"], ids=str)
 def test_positive_comment_add_user(comment):
-    send_and_assert("cooment", comment, 201)
+    send_and_assert("comment", comment, 201)
     
 @pytest.mark.parametrize("comment", config.settings.PAYLOAD["COMMENT_NEGATIVE"], ids=str)
 def test_negative_comment_add_user(comment):
