@@ -1,11 +1,10 @@
 import pytest
 import config.settings
-from utils.api_client import APIClient, CheckStatus
+from utils.api_client import APIClient
 from schemas.user_schema import Shop
 import allure
 
 client = APIClient()
-check_status = CheckStatus()
 
 @pytest.mark.parametrize("shop_name, expected_start, expected_end", config.settings.WAREHOUSES_DATA)
 def test_get_warehouses(shop_name, expected_start, expected_end):
