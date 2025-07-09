@@ -66,7 +66,6 @@ API_framework/
 2. Создай виртуальное окружение:
    ```bash
    python -m venv venv
-   source venv/bin/activate     # или venv\Scripts\activate на Windows
    ```
 
 3. Установи зависимости:
