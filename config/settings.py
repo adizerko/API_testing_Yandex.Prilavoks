@@ -1,9 +1,10 @@
-BASE_URL = "https://9fce21fd-87d1-4755-99d0-3c9654691e92.serverhub.praktikum-services.ru"
+BASE_URL = "https://0d8f3d05-7dfd-471a-80d4-55c7236443a3.serverhub.praktikum-services.ru"
 
 ENDPOINTS = {
     "get_warehouse": "/api/v1/warehouses",
     "add_user": "/api/v1/users",
-    "get_delivery": "/api/v1/couriers"
+    "get_delivery": "/api/v1/couriers",
+    "delivery_Moscow": "/moscow-delivery/v1/calculate"
 }
 
 WAREHOUSES_DATA = [
