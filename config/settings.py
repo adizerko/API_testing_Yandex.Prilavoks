@@ -1,4 +1,4 @@
-BASE_URL = "https://0d8f3d05-7dfd-471a-80d4-55c7236443a3.serverhub.praktikum-services.ru"
+BASE_URL = "https://86253b47-c367-4d30-9ccc-d28f3119f256.serverhub.praktikum-services.ru"
 
 ENDPOINTS = {
     "get_warehouse": "/api/v1/warehouses",
