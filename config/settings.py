@@ -4,11 +4,9 @@ ENDPOINTS = {
     "get_warehouse": "/api/v1/warehouses",
     "add_user": "/api/v1/users",
     "get_delivery": "/api/v1/couriers",
-    "delivery_Moscow": "/moscow-delivery/v1/calculate"
+    "delivery_Moscow": "/moscow-delivery/v1/calculate",
+    "delivery_broomstick": "/on-a-broomstick/v1/delivery"
 }
-
-MOSCOW_DELIVERY = "Доставка Москва"
-ON_A_BROOMSTICK = "На метле уюта"
 
 WAREHOUSES_DATA = [
     ("Имеется всё", 7, 23),
