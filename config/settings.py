@@ -1,4 +1,4 @@
-BASE_URL = "https://86253b47-c367-4d30-9ccc-d28f3119f256.serverhub.praktikum-services.ru"
+BASE_URL = "https://52860353-f398-46d7-8775-9cd59c5ee731.serverhub.praktikum-services.ru"
 
 ENDPOINTS = {
     "get_warehouse": "/api/v1/warehouses",
@@ -6,6 +6,9 @@ ENDPOINTS = {
     "get_delivery": "/api/v1/couriers",
     "delivery_Moscow": "/moscow-delivery/v1/calculate"
 }
+
+MOSCOW_DELIVERY = "Доставка Москва"
+ON_A_BROOMSTICK = "На метле уюта"
 
 WAREHOUSES_DATA = [
     ("Имеется всё", 7, 23),

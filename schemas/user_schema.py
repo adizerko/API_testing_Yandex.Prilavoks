@@ -9,7 +9,6 @@ class Shop(BaseModel):
     name: str
     workingHours: WorkingHours
     
-
     
 class Shop(RootModel[List[Shop]]):
     pass

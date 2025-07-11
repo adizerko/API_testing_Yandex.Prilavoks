@@ -1,6 +1,7 @@
 import pytest
 import config.settings
 from utils.api_client import APIClient
+from schemas.delivery_schema import DeliveryResponse
 
 
 client = APIClient()
@@ -28,40 +29,50 @@ payload = {
     "productsWeight": 2
 }
 
-def post_response_json(name_field, value):
+def post_response_json(name_field: str, value):
     data = payload.copy()
     data[name_field] = value
     client.post(config.settings.ENDPOINTS["delivery_Moscow"], data)
 
 
-def check_success_response(name, host_cost, time_min=30, time_max=35, code=200, client_cost=0, PossibleToDeliver=True):
+def check_success_response(
+    name: str,
+    host_cost: int,
+    time_min: int=30,
+    time_max: int=35,
+    code: int=200,
+    client_cost: int=0,
+    PossibleToDeliver: bool=True):
+    
+    response_data = DeliveryResponse.model_validate(client.response_json)
     assert client.response.status_code == code
-    assert client.response_json["name"] == name
-    assert client.response_json["isItPossibleToDeliver"] == True
-    assert client.response_json["hostDeliveryCost"] == host_cost
-    assert client.response_json["toBeDeliveredTime"]["min"] == time_min  
-    assert client.response_json["toBeDeliveredTime"]["max"] == time_max
-    assert client.response_json["clientDeliveryCost"] == client_cost
+    assert response_data.name == name    
+    assert response_data.isItPossibleToDeliver == PossibleToDeliver
+    assert response_data.hostDeliveryCost == host_cost
+    assert response_data.toBeDeliveredTime.min == time_min
+    assert response_data.toBeDeliveredTime.max == time_max 
+    assert response_data.clientDeliveryCost == client_cost
+    DeliveryResponse.model_validate(client.response_json)
     
     
-def check_error_response():
+def check_error_response(code: int=400):
     assert client.response.headers["Content-Type"] == "application/json; charset=utf-8"
-    assert client.response.status_code == 400
-    assert client.response_json["code"] == 400
+    assert client.response.status_code == code
+    assert client.response_json["code"] == code
     assert isinstance(client.response_json["message"], str)     
     
     
 @pytest.mark.parametrize("quantity", QUANTITY_DATA["quantity_pos_0_10"])
 def test_correct_quantity_max10(quantity):
     post_response_json(PRODUCTS_COUNT, quantity)
-    check_success_response(config.settings.MOSCOW_DELIVERY, 25)
+    check_success_response(MOSCOW_DELIVERY, 25)
 
 
 @pytest.mark.parametrize("quantity", QUANTITY_DATA["quantity_pos_10_15"])
 def test_correct_quantity_max15(quantity):
     post_response_json(PRODUCTS_COUNT, quantity)
     check_success_response(MOSCOW_DELIVERY, 45)
-    
+
     
 @pytest.mark.parametrize("quantity", QUANTITY_DATA["quantity_neg"])
 def test_negative_quantity(quantity):
@@ -73,13 +84,13 @@ def test_negative_quantity(quantity):
 def test_correct_weight_max3(weight):
     post_response_json(PRODUCTS_WEIGHT, weight)
     check_success_response(MOSCOW_DELIVERY, 25) 
- 
+
      
 @pytest.mark.parametrize("weight", QUANTITY_DATA["weight_pos_3.1_7"])
 def test_correct_weight_max7(weight):
     post_response_json(PRODUCTS_WEIGHT, weight)
     check_success_response(MOSCOW_DELIVERY, 45) 
-   
+
      
 @pytest.mark.parametrize("weight", QUANTITY_DATA["weight_neg"])
 def test_negative_weight(weight):
@@ -91,7 +102,7 @@ def test_negative_weight(weight):
 def test_correct_delivery_time(delivery_time):
     post_response_json(DELIVERY_TIME, delivery_time)
     check_success_response(MOSCOW_DELIVERY, 25)
-  
+
      
 @pytest.mark.parametrize("delivery_time", QUANTITY_DATA["delivery_time_neg"])
 def test_negative_delivery_time(delivery_time):
@@ -100,13 +111,16 @@ def test_negative_delivery_time(delivery_time):
 
 
 @pytest.mark.parametrize("field", QUANTITY_DATA["field"])
-def test_negative(field):
+def test_negative_del_one_field(field):
     data = payload.copy()
     del data[field]
     client.post(config.settings.ENDPOINTS["delivery_Moscow"], data)
+    check_error_response()
     
-    assert client.response.headers["Content-Type"]
-    assert client.response.status_code == 400
-    assert client.response_json["code"] == 400
-    assert isinstance(client.response_json["message"], str) 
-    
+def test_negative_empty_body():
+    data = payload.copy()
+    del data["deliveryTime"]
+    del data["productsCount"]
+    del data["productsWeight"]
+    client.post(config.settings.ENDPOINTS["delivery_Moscow"], data)
+    check_error_response()
